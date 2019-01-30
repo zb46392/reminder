@@ -1,0 +1,21 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.reminder.NewMemoActivity">
+    <item
+        android:id="@+id/save_memo"
+        android:orderInCategory="100"
+        android:title="@string/save"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_single_memo"
+        android:orderInCategory="100"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/set_single_reminder"
+        android:orderInCategory="100"
+        android:title="@string/set_reminder"
+        app:showAsAction="never" />
+</menu>
