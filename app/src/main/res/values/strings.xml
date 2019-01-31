@@ -8,4 +8,8 @@
     <string name="save">Save</string>
     <string name="title">Title</string>
     <string name="text">Text</string>
+    <string name="none">None</string>
+    <string name="daily">Daily</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
 </resources>

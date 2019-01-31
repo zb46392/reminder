@@ -36,8 +36,9 @@ public class MemoRecylerViewAdapter extends RecyclerView.Adapter<MemoRecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull final MemoRecyclerViewHolder memoRecyclerViewHolder, int i) {
+
         memoRecyclerViewHolder.getRepeat().setText(this.memos.get(i).getPeriod().toString());
-        memoRecyclerViewHolder.getTime().setText(this.memos.get(i).getDate().toString());
+        memoRecyclerViewHolder.getTime().setText(this.memos.get(i).getFormattedDate());
         memoRecyclerViewHolder.getTitle().setText(this.memos.get(i).getTitle());
 
         this.setColors(memoRecyclerViewHolder, selectedItems.get(i, false));

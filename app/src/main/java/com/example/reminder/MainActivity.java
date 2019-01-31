@@ -15,27 +15,28 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Memo> testMemos = new ArrayList<Memo>(Arrays.asList(
-            new Memo(new Date(), "Ispit: Metode optimizacije", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Mobilne tehnologije", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Metode optimizacije", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Metode optimizacije", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Mobilne tehnologije", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Metode optimizacije", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
-            new Memo(new Date(), "Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none)
+            new Memo(Calendar.getInstance(), "Ispit: Metode optimizacije", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.daily),
+            new Memo(Calendar.getInstance(), "Ispit: Mobilne tehnologije", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Metode optimizacije", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Metode optimizacije", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Mobilne tehnologije", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Metode optimizacije", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none),
+            new Memo(Calendar.getInstance(), "Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none)
     ));
 
     private MemoRecylerViewAdapter memoRecAdapter;
