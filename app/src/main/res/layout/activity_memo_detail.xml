@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/newMemoToolbar"
+            android:id="@+id/memoDetailToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -40,12 +40,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
+            android:id="@+id/baseMemoTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/title"
             android:inputType="text" />
 
         <EditText
+            android:id="@+id/baseMemoBody"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textMultiLine"
@@ -56,7 +58,7 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabNewMemo"
+        android:id="@+id/fabMemoDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

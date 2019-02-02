@@ -1,52 +1,48 @@
 package com.example.reminder;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-public class NewMemoActivity extends AppCompatActivity {
+public class NewMemoActivity extends BaseMemoDetailActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_memo);
-        Toolbar toolbar = findViewById(R.id.newMemoToolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fabSaveMemo = (FloatingActionButton)findViewById(R.id.fabNewMemo);
-        fabSaveMemo.setOnClickListener(new View.OnClickListener() {
+        getFabSaveMemo().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                Memo mem = new Memo();
+                mem.setTitle(getMemoTitle().getText().toString());
+                mem.setBody(getMemoBody().getText().toString());
+
+                new AsyncInsert().execute(mem);
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_new_memo, menu);
-        return true;
-    }
+    private class AsyncInsert extends AsyncTask{
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            ((MemoApp)getApplication()).getMemoDB().memoDao().insert((Memo)objects[0]);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.save_memo) {
-            return true;
+            return (Memo)objects[0];
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.newMemoAdded),
+                    Toast.LENGTH_LONG).show();
+
+            // refresh main activity...
+            finish();
+        }
     }
 }
+
+

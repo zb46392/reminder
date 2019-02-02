@@ -10,15 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MemoRecylerViewAdapter extends RecyclerView.Adapter<MemoRecyclerViewHolder> {
     private static final String TAG = MemoRecylerViewAdapter.class.getSimpleName();
-    private ArrayList<Memo> memos;
+    private List<Memo> memos;
     private SparseBooleanArray selectedItems;
     private Context context;
 
-    public MemoRecylerViewAdapter(ArrayList<Memo> memos, Context context){
+    public MemoRecylerViewAdapter(List<Memo> memos, Context context){
 
         this.memos = memos;
         this.context = context;
@@ -38,7 +38,7 @@ public class MemoRecylerViewAdapter extends RecyclerView.Adapter<MemoRecyclerVie
     public void onBindViewHolder(@NonNull final MemoRecyclerViewHolder memoRecyclerViewHolder, int i) {
 
         memoRecyclerViewHolder.getRepeat().setText(this.memos.get(i).getPeriod().toString());
-        memoRecyclerViewHolder.getTime().setText(this.memos.get(i).getFormattedDate());
+        memoRecyclerViewHolder.getTime().setText(this.memos.get(i).getFormattedReminderDate());
         memoRecyclerViewHolder.getTitle().setText(this.memos.get(i).getTitle());
 
         this.setColors(memoRecyclerViewHolder, selectedItems.get(i, false));

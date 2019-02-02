@@ -1,7 +1,14 @@
 package com.example.reminder;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.Calendar;
 
+
+@Entity(tableName = "Memos")
 public class Memo {
     public static enum Period {
         none(MemoApp.getLocalResources().getString(R.string.none)),
@@ -20,33 +27,44 @@ public class Memo {
             return this.period;
         }
     }
-        
-        ;
-    private Calendar date;
+
+    @PrimaryKey(autoGenerate = true)
+    private Integer id;
+    @ColumnInfo(name="create_date")
+    private Calendar createDate;
+    @ColumnInfo(name="reminder_date")
+    private Calendar reminderDate;
     private String title;
     private String body;
     private Period period;
 
     public Memo(){
-        this.date = Calendar.getInstance();
+        this.createDate = Calendar.getInstance();
+        this.reminderDate = null;
         this.title = new String();
         this.body = new String();
         this.period = Period.none;
     }
 
-    public Memo(Calendar date, String title, String body, Period period){
-        this.date = date;
+    @Ignore
+    public Memo(String title, String body, Period period, Calendar reminderDate){
+        this.createDate = Calendar.getInstance();
         this.title = title;
         this.body = body;
         this.period = period;
+        this.reminderDate = reminderDate;
     }
 
-    public Calendar getDate() {
-        return date;
+    public Integer getId() {return this.id;}
+
+    public void setId(Integer id){ this.id = id;}
+
+    public Calendar getCreateDate() {
+        return this.createDate;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
     }
 
     public String getTitle() {
@@ -73,15 +91,31 @@ public class Memo {
         this.period = period;
     }
 
-    public String getFormattedDate(){
-        String formattedDate = new String();
+    public Calendar getReminderDate(){ return this.reminderDate; }
 
-        formattedDate += this.date.get(Calendar.DAY_OF_MONTH) + ".";
-        formattedDate += (this.date.get(Calendar.MONTH) + 1) + ".";
-        formattedDate += this.date.get(Calendar.YEAR) + ". - ";
-        formattedDate += this.date.get(Calendar.HOUR_OF_DAY) + ":";
-        formattedDate += this.date.get(Calendar.MINUTE) + ".";
+    public void setReminderDate(Calendar reminderDate) { this.reminderDate = reminderDate; }
 
-        return formattedDate;
+    private String getFormattedDate(Calendar date){
+        if(date != null) {
+            String formattedDate = new String();
+
+            formattedDate += date.get(Calendar.DAY_OF_MONTH) + ".";
+            formattedDate += (date.get(Calendar.MONTH) + 1) + ".";
+            formattedDate += date.get(Calendar.YEAR) + ". - ";
+            formattedDate += date.get(Calendar.HOUR_OF_DAY) + ":";
+            formattedDate += date.get(Calendar.MINUTE) + ".";
+
+            return formattedDate;
+        } else {
+            return "-";
+        }
+    }
+
+    public String getFormattedCreateDate(){
+        return this.getFormattedDate(this.createDate);
+    }
+
+    public String getFormattedReminderDate(){
+        return this.getFormattedDate(this.reminderDate);
     }
 }
