@@ -1,6 +1,7 @@
 package com.example.reminder;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -113,7 +114,7 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
     }
 
     private void setReminder(){
-
+        startActivity(new Intent(this, SetReminderActivity.class));
     }
 
     private class AsyncMemoDeleter extends AsyncTask{

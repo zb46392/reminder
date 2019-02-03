@@ -18,7 +18,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="memoDeleted">Reminder was deleted.</string>
+    <string name="saveReminder">Save reminder</string>
+    <string name="information">Information</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="setTime">Set time</string>
+    <string name="setDate">Set date</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
