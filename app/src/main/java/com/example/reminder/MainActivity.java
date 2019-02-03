@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private List<Memo> loadMemosFromDb(){
-            return ((MemoApp)getApplication()).getMemoDB().memoDao().getAll();
+            return ((MemoApp)getApplication()).getMemoDB().memoDao().getAllBasic();
         }
     }
 }

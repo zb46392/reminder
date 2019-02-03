@@ -1,6 +1,7 @@
 package com.example.reminder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +47,14 @@ public class MemoRecylerViewAdapter extends RecyclerView.Adapter<MemoRecyclerVie
         memoRecyclerViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "item clicked...");
+                Memo memo = memos.get(memoRecyclerViewHolder.getAdapterPosition());
+
+                Intent intent = new Intent(memoRecyclerViewHolder.getContext(), UpdateMemoActivity.class);
+
+                intent.putExtra(MemoApp.memoIdExtra, memo.getId());
+
+                memoRecyclerViewHolder.getContext().startActivity(intent);
+                Log.d(TAG, "item clicked... Memo ID: " + memo.getId());
             }
         });
 

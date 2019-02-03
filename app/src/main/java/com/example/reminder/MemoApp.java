@@ -8,6 +8,7 @@ public class MemoApp extends Application {
 
     private static Resources localResources;
     private MemoDB memoDB;
+    public final static String memoIdExtra = "memoId";
 
     @Override
     public void onCreate() {
@@ -25,5 +26,12 @@ public class MemoApp extends Application {
 
     public MemoDB getMemoDB(){
         return this.memoDB;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        this.memoDB.close();
     }
 }

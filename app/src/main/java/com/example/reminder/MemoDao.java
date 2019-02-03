@@ -12,7 +12,13 @@ import java.util.List;
 public interface MemoDao {
 
     @Query("SELECT * FROM Memos")
-    public List<Memo> getAll();
+    List<Memo> getAll();
+
+    @Query("SELECT * FROM Memos WHERE id=:id")
+    Memo getById(Integer id);
+
+    @Query("SELECT id, create_date, title, reminder_date, period FROM Memos")
+    List<Memo> getAllBasic();
 
     @Insert
     void insert(Memo memo);
