@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class UpdateMemoActivity extends BaseMemoDetailActivity{
-    private Memo memo;
     private static final String TAG = UpdateMemoActivity.class.getSimpleName();
 
     @Override
@@ -18,21 +17,19 @@ public class UpdateMemoActivity extends BaseMemoDetailActivity{
     }
 
     private void populateTextView(){
-        getMemoTitle().setText(this.memo.getTitle());
-        getMemoBody().setText(this.memo.getBody());
+        getMemoTitle().setText(getMemo().getTitle());
+        getMemoBody().setText(getMemo().getBody());
 
-        Log.d(TAG, "TextView populated...Memo ID: " + this.memo.getId());
+        Log.d(TAG, "TextView populated...Memo ID: " + getMemo().getId());
     }
 
     @Override
     protected void saveMemo() {
-        this.memo.setTitle(getMemoTitle().getText().toString());
-        this.memo.setBody(getMemoBody().getText().toString());
+        getMemo().setTitle(getMemoTitle().getText().toString());
+        getMemo().setBody(getMemoBody().getText().toString());
 
-        new AsyncMemoUpdater().execute(this.memo);
+        new AsyncMemoUpdater().execute(getMemo());
     }
-
-    private void setMemo(Memo memo) { this.memo = memo; }
 
     private class AsyncMemoLoader extends AsyncTask{
 

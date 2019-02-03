@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.RoomWarnings;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface MemoDao {
     Memo getById(Integer id);
 
     @Query("SELECT id, create_date, title, reminder_date, period FROM Memos")
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     List<Memo> getAllBasic();
 
     @Insert

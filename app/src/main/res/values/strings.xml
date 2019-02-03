@@ -13,5 +13,12 @@
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
     <string name="newMemoAdded">New reminder added.</string>
-    <string name="memoUpdated">Reminder Updateted.</string>
+    <string name="memoUpdated">Reminder updated.</string>
+    <string name="deleteMemoDialog">Are you sure you want to delete this reminder?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="memoDeleted">Reminder was deleted.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,9 +1,20 @@
 package com.example.reminder;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
 public class NewMemoActivity extends BaseMemoDetailActivity {
+    private final static String TAG = NewMemoActivity.class.getSimpleName();
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.delete_single_memo).setEnabled(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     protected void saveMemo() {
