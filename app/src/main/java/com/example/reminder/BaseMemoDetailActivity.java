@@ -5,10 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 
-public class BaseMemoDetailActivity extends AppCompatActivity {
+public abstract class BaseMemoDetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fabSaveMemo;
     private EditText title;
@@ -23,6 +26,13 @@ public class BaseMemoDetailActivity extends AppCompatActivity {
         this.title = findViewById(R.id.baseMemoTitle);
         this.body = findViewById(R.id.baseMemoBody);
         this.fabSaveMemo = findViewById(R.id.fabMemoDetail);
+
+        this.fabSaveMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMemo();
+            }
+        });
     }
 
     protected Toolbar getToolbar(){
@@ -41,7 +51,8 @@ public class BaseMemoDetailActivity extends AppCompatActivity {
         return  this.body;
     }
 
-    /*
+    protected abstract void saveMemo();
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_memo_detail, menu);
@@ -57,10 +68,10 @@ public class BaseMemoDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.save_memo) {
+            this.saveMemo();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-    */
 }

@@ -1,5 +1,6 @@
 package com.example.reminder;
 
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,27 +18,9 @@ import android.view.MenuItem;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    /*
-    private List<Memo> testMemos = new ArrayList<Memo>(Arrays.asList(
-            new Memo("Ispit: Metode optimizacije", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.daily, Calendar.getInstance()),
-            new Memo("Ispit: Mobilne tehnologije", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Metode optimizacije", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Metode optimizacije", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Mobilne tehnologije", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Metode optimizacije", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Upravljanje kvalitetom i metrika", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Kolaboracija i upravljanje dokumentima", "", Memo.Period.none, Calendar.getInstance()),
-            new Memo("Ispit: Poslovni sustavi za upravljanje sadržaja na webu", "", Memo.Period.none, Calendar.getInstance())
-    ));
-    */
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
 
-        new MemosView().execute();
+        new MemosLoader().execute();
 
         FloatingActionButton fab = findViewById(R.id.fabNewMemo);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,28 +62,41 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new MemosLoader().execute();
+    }
+
     private void startNewMemoActivity(){
         this.startActivity(new Intent(this, NewMemoActivity.class));
     }
 
-    private class MemosView extends AsyncTask {
-        private MemoRecylerViewAdapter memoRecAdapter;
+    private void updateMemoRecycleView(List<Memo> memos){
+        MemoRecylerViewAdapter memoRecAdapter = new MemoRecylerViewAdapter(memos, getApplicationContext());
+        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        RecyclerView recMemos = findViewById(R.id.memoRecyclerView);
+
+        recMemos.setLayoutManager(llm);
+
+        recMemos.addItemDecoration(new DividerItemDecoration(recMemos.getContext(), llm.getOrientation()));
+
+        recMemos.swapAdapter(memoRecAdapter, true);
+    }
+
+    private class MemosLoader extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            this.memoRecAdapter = new MemoRecylerViewAdapter(this.loadMemosFromDb(), getApplicationContext());
 
-            this.createMemoRecyclerView().setAdapter(memoRecAdapter);
-            return null;
+            return this.loadMemosFromDb();
         }
 
-        private RecyclerView createMemoRecyclerView(){
-            RecyclerView recMemos = findViewById(R.id.memoRecyclerView);
-            LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-            recMemos.setLayoutManager(llm);
-            recMemos.addItemDecoration(new DividerItemDecoration(recMemos.getContext(), llm.getOrientation()));
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
 
-            return recMemos;
+            updateMemoRecycleView((List<Memo>) o);
         }
 
         private List<Memo> loadMemosFromDb(){

@@ -1,26 +1,18 @@
 package com.example.reminder;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.Toast;
 
 public class NewMemoActivity extends BaseMemoDetailActivity {
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void saveMemo() {
+        Memo mem = new Memo();
 
-        getFabSaveMemo().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Memo mem = new Memo();
-                mem.setTitle(getMemoTitle().getText().toString());
-                mem.setBody(getMemoBody().getText().toString());
+        mem.setTitle(getMemoTitle().getText().toString());
+        mem.setBody(getMemoBody().getText().toString());
 
-                new AsyncInsert().execute(mem);
-            }
-        });
+        new AsyncInsert().execute(mem);
     }
 
     private class AsyncInsert extends AsyncTask{
@@ -39,7 +31,6 @@ public class NewMemoActivity extends BaseMemoDetailActivity {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.newMemoAdded),
                     Toast.LENGTH_LONG).show();
 
-            // refresh main activity...
             finish();
         }
     }
