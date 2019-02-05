@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 
 public abstract class BaseMemoDetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -34,7 +36,7 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
         this.title = findViewById(R.id.baseMemoTitle);
         this.body = findViewById(R.id.baseMemoBody);
         this.fabSaveMemo = findViewById(R.id.fabMemoDetail);
-        this.memo = null;
+        this.memo = new Memo();
 
         this.fabSaveMemo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +116,28 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
     }
 
     private void setReminder(){
-        startActivity(new Intent(this, SetReminderActivity.class));
+        startActivityForResult(new Intent(this, SetReminderActivity.class),
+                MemoApp.setReminderRequestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == MemoApp.setReminderRequestCode){
+            Long timeInMilis = (Long)data.getExtras().get(MemoApp.memoMilisExtra);
+
+            if(timeInMilis != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(timeInMilis);
+
+                this.memo.setReminderDate(calendar);
+
+                Log.d(TAG, "ActivityResult: " + timeInMilis);
+            }
+
+            Log.d(TAG, "ActivityResult: NULL");
+        }
     }
 
     private class AsyncMemoDeleter extends AsyncTask{

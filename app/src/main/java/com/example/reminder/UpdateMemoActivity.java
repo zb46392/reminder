@@ -70,4 +70,10 @@ public class UpdateMemoActivity extends BaseMemoDetailActivity{
             finish();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "DESTROYED...");
+    }
 }

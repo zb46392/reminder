@@ -9,6 +9,9 @@ public class MemoApp extends Application {
     private static Resources localResources;
     private MemoDB memoDB;
     public final static String memoIdExtra = "memoId";
+    public final static String memoMilisExtra = "memoMilis";
+
+    public static final Integer setReminderRequestCode = 100;
 
     @Override
     public void onCreate() {

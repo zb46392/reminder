@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RoomWarnings;
 import android.arch.persistence.room.Update;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Dao
@@ -21,6 +22,10 @@ public interface MemoDao {
     @Query("SELECT id, create_date, title, reminder_date, period FROM Memos")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     List<Memo> getAllBasic();
+
+    @Query("SELECT reminder_date FROM Memos WHERE id = :id")
+    Calendar getReminderDateById(Integer id);
+
 
     @Insert
     void insert(Memo memo);

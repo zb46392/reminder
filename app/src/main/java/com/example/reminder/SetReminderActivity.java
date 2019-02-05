@@ -1,72 +1,98 @@
 package com.example.reminder;
 
+import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TimePicker;
 
-public class SetReminderActivity extends AppCompatActivity {
+import java.util.Calendar;
+
+public class SetReminderActivity extends AppCompatActivity implements
+        ReminderInformationFragment.ReminderComfirmation, ReminderInformationFragment.ReminderRejector{
 
     private ViewPager mViewPager;
     private TabLayout tabLayout;
+    private ReminderInformationFragment infoFrag;
+    private ReminderTimepickerFragment timeFrag;
+    private ReminderDatepickerFragment dateFrag;
+    private Calendar calendar;
+    private final static String TAG = SetReminderActivity.class.getSimpleName();
+
+    private Boolean fragPage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_set_reminder);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.setReminderToolbar));
+        if(savedInstanceState == null){
+            this.infoFrag = new ReminderInformationFragment();
+            this.timeFrag = new ReminderTimepickerFragment();
+            this.dateFrag = new ReminderDatepickerFragment();
+            this.calendar = Calendar.getInstance();
+            this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, this.infoFrag).
+                    commit();
+        }
 
-        this.mViewPager = (ViewPager) findViewById(R.id.setReminderViewPager);
-        this.mViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+
+        //setSupportActionBar((Toolbar) findViewById(R.id.setReminderToolbar));
 
         this.tabLayout = findViewById(R.id.setReminderTabs);
-
-        //this.tabLayout.setupWithViewPager(this.mViewPager);
-
 
         this.tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+                switch (tab.getPosition()){
+                    case 0:
+                        if(timeFrag.getTpHour() != null && timeFrag.getTpMinute() != null){
+                            infoFrag.setTime(timeFrag.getTpHour(), timeFrag.getTpMinute());
+                        }
+
+                        if(dateFrag.getDpDay() != null && dateFrag.getDpMonth() != null && dateFrag.getDpYear() != null){
+                            infoFrag.setDate(dateFrag.getDpDay(), dateFrag.getDpMonth(), dateFrag.getDpYear());
+                        }
+                        ft.replace(R.id.fragmentHolder, infoFrag);
+                        break;
+                    case 1:
+                        ft.replace(R.id.fragmentHolder, timeFrag);
+                        break;
+                    case 2:
+                        ft.replace(R.id.fragmentHolder, dateFrag);
+                        break;
+                }
+
+                ft.commit();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                Log.d(TAG, "tabUnselected : " + tab.getText());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Log.d(TAG, "tabReselected : " + tab.getText());
             }
         });
 
-        this.mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                tabLayout.getTabAt(position).select();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     @Override
@@ -86,6 +112,32 @@ public class SetReminderActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void confirmReminder(Calendar calendar) {
+        Intent intent = new Intent(SetReminderActivity.this, BaseMemoDetailActivity.class);
+        if(calendar != null) {
+            intent.putExtra(MemoApp.memoMilisExtra, calendar.getTimeInMillis());
+        } else {
+            intent.putExtra(MemoApp.memoMilisExtra, (Long)null);
+        }
+        Log.d(TAG, "Reminder confirmed: " + intent.getExtras().get(MemoApp.memoMilisExtra));
+
+        this.setResult(MemoApp.setReminderRequestCode, intent);
+        finish();
+
+    }
+
+    @Override
+    public void rejectReminder() {
+        Intent intent = new Intent(SetReminderActivity.this, BaseMemoDetailActivity.class);
+        intent.putExtra(MemoApp.memoMilisExtra, (Long)null);
+
+        this.setResult(MemoApp.setReminderRequestCode, intent);
+        finish();
+    }
+
+
+    /*
     public static class PlaceholderFragment extends Fragment{
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -130,4 +182,5 @@ public class SetReminderActivity extends AppCompatActivity {
             return 3;
         }
     }
+    */
 }
