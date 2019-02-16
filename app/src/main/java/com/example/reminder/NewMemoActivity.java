@@ -13,12 +13,11 @@ public class NewMemoActivity extends BaseMemoDetailActivity {
 
     @Override
     protected void saveMemo() {
-        Memo mem = new Memo();
 
-        mem.setTitle(getMemoTitle().getText().toString());
-        mem.setBody(getMemoBody().getText().toString());
+        getMemo().setTitle(getMemoTitle().getText().toString());
+        getMemo().setBody(getMemoBody().getText().toString());
 
-        getMemoViewModel().insert(mem);
+        getMemoViewModel().insert(getMemo());
 
         finish();
     }

@@ -128,7 +128,7 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == MemoApp.setReminderRequestCode){
+        if(requestCode == MemoApp.setReminderRequestCode && data != null){
             Long timeInMilis = (Long)data.getExtras().get(MemoApp.memoMilisExtra);
 
             if(timeInMilis != null){
