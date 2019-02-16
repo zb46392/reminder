@@ -1,97 +1,126 @@
 package com.example.reminder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.recyclerview.extensions.ListAdapter;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import java.util.List;
-
-public class MemoRecylerViewAdapter extends RecyclerView.Adapter<MemoRecyclerViewHolder> {
+public class MemoRecylerViewAdapter extends ListAdapter<Memo, MemoRecylerViewAdapter.MemoRecyclerViewHolder> {
     private static final String TAG = MemoRecylerViewAdapter.class.getSimpleName();
-    private List<Memo> memos;
-    private SparseBooleanArray selectedItems;
-    private Context context;
+    private OnItemClickListener clickListener;
+    private OnItemLongClickListener longClickListener;
+    private static final DiffUtil.ItemCallback<Memo> DIFF_CALLBACK = new DiffUtil.ItemCallback<Memo>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Memo oldMemo, @NonNull Memo newMemo) {
+            return oldMemo.getId() == newMemo.getId();
+        }
 
-    public MemoRecylerViewAdapter(List<Memo> memos, Context context){
+        @Override
+        public boolean areContentsTheSame(@NonNull Memo oldMemo, @NonNull Memo newMemo) {
+            return oldMemo.getTitle().equals(newMemo.getTitle())
+                    && oldMemo.getBody().equals(newMemo.getBody())
+                    && oldMemo.getFormattedReminderDate().equals(newMemo.getFormattedReminderDate())
+                    && oldMemo.getPeriod().equals(newMemo.getPeriod());
+        }
+    };
 
-        this.memos = memos;
-        this.context = context;
-        this.selectedItems = new SparseBooleanArray();
+    public MemoRecylerViewAdapter() {
+        super(DIFF_CALLBACK);
     }
 
     @NonNull
     @Override
     public MemoRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row, viewGroup, false);
-        MemoRecyclerViewHolder vH = new MemoRecyclerViewHolder(v);
+        View v = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.row, viewGroup, false);
 
-        return vH;
+        return new MemoRecyclerViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MemoRecyclerViewHolder memoRecyclerViewHolder, int i) {
+        memoRecyclerViewHolder.repeat.setText(getItem(i).getPeriod().toString());
+        memoRecyclerViewHolder.time.setText(getItem(i).getFormattedReminderDate());
+        memoRecyclerViewHolder.title.setText(getItem(i).getTitle());
+        memoRecyclerViewHolder.background.setSelected(false);
+    }
 
-        memoRecyclerViewHolder.getRepeat().setText(this.memos.get(i).getPeriod().toString());
-        memoRecyclerViewHolder.getTime().setText(this.memos.get(i).getFormattedReminderDate());
-        memoRecyclerViewHolder.getTitle().setText(this.memos.get(i).getTitle());
+    class MemoRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private TextView repeat, time, title;
+        private LinearLayout background;
+        private Context context;
 
-        this.setColors(memoRecyclerViewHolder, selectedItems.get(i, false));
+        public MemoRecyclerViewHolder(@NonNull View itemView) {
+            super(itemView);
 
-        memoRecyclerViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Memo memo = memos.get(memoRecyclerViewHolder.getAdapterPosition());
+            this.repeat = itemView.findViewById(R.id.textRepeat);
+            this.time = itemView.findViewById(R.id.textTime);
+            this.title = itemView.findViewById(R.id.textTitle);
+            this.background = itemView.findViewById(R.id.memoRecListItem);
+            this.context = itemView.getContext();
 
-                Intent intent = new Intent(memoRecyclerViewHolder.getContext(), UpdateMemoActivity.class);
-
-                intent.putExtra(MemoApp.memoIdExtra, memo.getId());
-
-                memoRecyclerViewHolder.getContext().startActivity(intent);
-                Log.d(TAG, "item clicked... Memo ID: " + memo.getId());
-            }
-        });
-
-        memoRecyclerViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.d(TAG, "item long clicked...");
-
-                if(selectedItems.get(memoRecyclerViewHolder.getAdapterPosition(), false)){
-                    selectedItems.delete(memoRecyclerViewHolder.getAdapterPosition());
-                    setColors(memoRecyclerViewHolder, false);
-                } else {
-                    selectedItems.put(memoRecyclerViewHolder.getAdapterPosition(), true);
-                    memoRecyclerViewHolder.getBackground().setSelected(true);
-                    setColors(memoRecyclerViewHolder, true);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Integer position = getAdapterPosition();
+                    if (clickListener != null && position != RecyclerView.NO_POSITION) {
+                        clickListener.onItemClick(getItem(position));
+                    }
                 }
-                return true;
-            }
-        });
-    }
+            });
 
-    @Override
-    public int getItemCount() {
-        return this.memos.size();
-    }
-
-    private void setColors(MemoRecyclerViewHolder memoRecyclerViewHolder ,Boolean isSelected){
-        if(isSelected){
-            memoRecyclerViewHolder.getBackground().setSelected(isSelected);
-            memoRecyclerViewHolder.getRepeat().setTextColor(ContextCompat.getColor(context, R.color.colorSelectedText));
-            memoRecyclerViewHolder.getTime().setTextColor(ContextCompat.getColor(context, R.color.colorSelectedText));
-            memoRecyclerViewHolder.getTitle().setTextColor(ContextCompat.getColor(context, R.color.colorSelectedText));
-        } else {
-            memoRecyclerViewHolder.getBackground().setSelected(isSelected);
-            memoRecyclerViewHolder.getTitle().setTextColor(ContextCompat.getColor(context, R.color.colorText));
-            memoRecyclerViewHolder.getTime().setTextColor(ContextCompat.getColor(context,R.color.colorText));
-            memoRecyclerViewHolder.getRepeat().setTextColor(ContextCompat.getColor(context,R.color.colorText));
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Integer position = getAdapterPosition();
+                    if (longClickListener != null && position != RecyclerView.NO_POSITION) {
+                        setColors();
+                        longClickListener.onItemLongClick(getItem(position));
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
         }
+
+        public void setColors() {
+
+            if (this.background.isSelected()) {
+                this.background.setSelected(false);
+                this.repeat.setTextColor(ContextCompat.getColor(context, R.color.colorSelectedText));
+                this.time.setTextColor(ContextCompat.getColor(context, R.color.colorSelectedText));
+                this.title.setTextColor(ContextCompat.getColor(context, R.color.colorSelectedText));
+            } else {
+                this.background.setSelected(true);
+                this.title.setTextColor(ContextCompat.getColor(context, R.color.colorText));
+                this.time.setTextColor(ContextCompat.getColor(context, R.color.colorText));
+                this.repeat.setTextColor(ContextCompat.getColor(context, R.color.colorText));
+            }
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Memo memo);
+    }
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(Memo memo);
+
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.clickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.longClickListener = listener;
     }
 }

@@ -1,8 +1,8 @@
 package com.example.reminder;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import java.util.Calendar;
 
 
@@ -25,7 +23,9 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
     private EditText title;
     private EditText body;
     private Memo memo;
+    private MemoViewModel memoViewModel;
     private static final String TAG = BaseMemoDetailActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,8 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
                 saveMemo();
             }
         });
+
+        this.memoViewModel = ViewModelProviders.of(this).get(MemoViewModel.class);
     }
 
     protected Toolbar getToolbar(){
@@ -104,7 +106,9 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.d(TAG, "Deletion confirmed.");
 
-                    new AsyncMemoDeleter().execute();
+                    memoViewModel.delete(getMemo());
+
+                    finish();
                 }
             }).setPositiveButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
                 @Override
@@ -140,23 +144,5 @@ public abstract class BaseMemoDetailActivity extends AppCompatActivity {
         }
     }
 
-    private class AsyncMemoDeleter extends AsyncTask{
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            ((MemoApp)getApplication()).getMemoDB().memoDao().delete(getMemo());
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.memoDeleted),
-                    Toast.LENGTH_LONG).show();
-
-            finish();
-        }
-    }
+    protected MemoViewModel getMemoViewModel(){ return this.memoViewModel; }
 }

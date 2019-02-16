@@ -40,7 +40,8 @@
         android:gravity="center"
         android:id="@+id/textTitle"
         android:text="Mobilne tehnologije"
-        android:textStyle="bold"
-        android:textColor="@color/colorText"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
 </LinearLayout>

@@ -18,21 +18,19 @@ public class ReminderInformationFragment extends Fragment {
 
     private TextView timeText;
     private TextView dateText;
-    private static Integer hour, minute;
-    private static Integer day, month, year;
+    private Integer hour, minute;
+    private Integer day, month, year;
     private static final String TAG = ReminderInformationFragment.class.getSimpleName();
 
-    private View.OnClickListener setReminder;
-    private View.OnClickListener cancelReminder;
 
-    ReminderComfirmation remCon;
-    ReminderRejector remRej;
+    private ReminderConfirmation remCon;
+    private ReminderRejection remRej;
 
-    public interface ReminderComfirmation{
+    public interface ReminderConfirmation{
         void confirmReminder(Calendar calendar);
     }
 
-    public interface ReminderRejector{
+    public interface ReminderRejection{
         void rejectReminder();
     }
 
@@ -59,10 +57,29 @@ public class ReminderInformationFragment extends Fragment {
             this.dateText.setText(this.day + "." + Integer.toString(this.month + 1) + "." + this.year + ".");
         }
 
-        this.setReminder = new View.OnClickListener() {
+
+    }
+
+
+    public void setTime(Integer hour, Integer minute){
+        this.hour = hour;
+        this.minute = minute;
+    }
+
+    public void setDate(Integer day, Integer month, Integer year){
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart...");
+
+        ((FloatingActionButton)getView().findViewById(R.id.fabSetReminder)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(hour != null && minute != null){
                     Calendar calendar = Calendar.getInstance();
 
@@ -82,40 +99,34 @@ public class ReminderInformationFragment extends Fragment {
 
                 remCon.confirmReminder(null);
             }
-        };
+        });
 
-        this.cancelReminder = new View.OnClickListener() {
+        ((FloatingActionButton)getView().findViewById(R.id.fabSetReminder)).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d(TAG, "fabSetReminder long clicked...");
+
+                return true;
+            }
+        });
+
+        ((FloatingActionButton)getView().findViewById(R.id.fabCancelReminder)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 remRej.rejectReminder();
             }
-        };
-
-
-        ((FloatingActionButton)getView().findViewById(R.id.fabSetReminder)).setOnClickListener(this.setReminder);
-
-        ((FloatingActionButton)getView().findViewById(R.id.fabCancelReminder)).setOnClickListener(this.cancelReminder);
-    }
-
-
-    public void setTime(Integer hour, Integer minute){
-        this.hour = hour;
-        this.minute = minute;
-    }
-
-    public void setDate(Integer day, Integer month, Integer year){
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        });
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        Log.d(TAG, "onAttach");
+
         try {
-            this.remCon = (ReminderComfirmation) context;
-            this.remRej = (ReminderRejector) context;
+            this.remCon = (ReminderConfirmation) context;
+            this.remRej = (ReminderRejection) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement TextClicked");
@@ -125,11 +136,13 @@ public class ReminderInformationFragment extends Fragment {
     @Override
     public void onDetach() {
         Log.d(TAG, "Fragment Detached...");
-        this.setReminder = null;
-        this.cancelReminder = null;
+        super.onDetach();
         this.remCon = null;
         this.remRej = null;
-        super.onDetach();
+
     }
 
+    public FloatingActionButton getSetFab(){
+        return (FloatingActionButton)this.getView().findViewById(R.id.fabSetReminder);
+    }
 }

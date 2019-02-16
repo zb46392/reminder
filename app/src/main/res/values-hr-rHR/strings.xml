@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Reminder</string>
+    <string name="action_settings">Postavke</string>
+    <string name="new_memo">Nova bilješka</string>
+    <string name="set_reminder">Postavi podsjetnik</string>
+    <string name="delete">Briši</string>
+    <string name="language">Jezik</string>
+    <string name="save">Pohrani</string>
+    <string name="title">Naslov</string>
+    <string name="text">Tekst</string>
+    <string name="none">Ništa</string>
+    <string name="daily">Dnevno</string>
+    <string name="monthly">Mjesečno</string>
+    <string name="yearly">Godišnje</string>
+    <string name="newMemoAdded">Novi podsjetnik dodan</string>
+    <string name="memoUpdated">Podsjetnik ažuriran.</string>
+    <string name="deleteMemoDialog">Jeste li sigurni da želite izbrisati ovaj podsjetnik?</string>
+    <string name="yes">Da</string>
+    <string name="no">Ne</string>
+    <string name="memoDeleted">Podsjetnik izbrisan.</string>
+    <string name="saveReminder">Sačuvaj podsjetnik</string>
+    <string name="information">Informacije</string>
+    <string name="time">Vrijeme</string>
+    <string name="date">Datum</string>
+    <string name="setTime">Postavi vrijeme</string>
+    <string name="setDate">Postavi datum</string>
+
+</resources>

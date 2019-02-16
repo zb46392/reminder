@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/row_selector"
+    android:id="@+id/memoRecCardItem">
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <!-- Date & Timestamp -->
+        <LinearLayout
+            android:id="@+id/row_lin_lay"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+
+            <!-- Repeat -->
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/textRepeat"
+                android:gravity="center"
+                android:text="Repeat: OFF"
+                android:textColor="@color/colorText"/>
+
+            <!-- Date / Time -->
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="130dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:id="@+id/textTime"
+                android:text="05.02.2019. - 18:00"
+                android:textColor="@color/colorText"/>
+        </LinearLayout>
+
+        <!-- MemoTitle -->
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:id="@+id/textTitle"
+            android:layout_centerVertical="true"
+            android:text="Mobilne Tehnologije"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:maxLines="1"
+            android:layout_toEndOf="@id/row_lin_lay"
+            android:ellipsize="end"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

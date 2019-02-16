@@ -22,7 +22,7 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 
 public class SetReminderActivity extends AppCompatActivity implements
-        ReminderInformationFragment.ReminderComfirmation, ReminderInformationFragment.ReminderRejector{
+        ReminderInformationFragment.ReminderConfirmation, ReminderInformationFragment.ReminderRejection{
 
     private ViewPager mViewPager;
     private TabLayout tabLayout;
@@ -30,10 +30,9 @@ public class SetReminderActivity extends AppCompatActivity implements
     private ReminderTimepickerFragment timeFrag;
     private ReminderDatepickerFragment dateFrag;
     private Calendar calendar;
+
+    private static Boolean isReminderConfirmed = false;
     private final static String TAG = SetReminderActivity.class.getSimpleName();
-
-    private Boolean fragPage = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,6 @@ public class SetReminderActivity extends AppCompatActivity implements
             this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, this.infoFrag).
                     commit();
         }
-
 
         //setSupportActionBar((Toolbar) findViewById(R.id.setReminderToolbar));
 
@@ -79,6 +77,51 @@ public class SetReminderActivity extends AppCompatActivity implements
                         break;
                 }
 
+/*
+                switch(tab.getPosition()){
+                    case 0:
+                        if(timeFrag.getTpHour() != null && timeFrag.getTpMinute() != null){
+                            infoFrag.setTime(timeFrag.getTpHour(), timeFrag.getTpMinute());
+                        }
+
+                        if(dateFrag.getDpDay() != null && dateFrag.getDpMonth() != null && dateFrag.getDpYear() != null){
+                            infoFrag.setDate(dateFrag.getDpDay(), dateFrag.getDpMonth(), dateFrag.getDpYear());
+                        }
+
+                        if (infoFrag.isAdded()) {
+                            ft.show(infoFrag);
+                        } else {
+                            ft.add(R.id.fragmentHolder, infoFrag);
+                        }
+
+                        if (timeFrag.isAdded()) { ft.hide(timeFrag); }
+
+                        if (dateFrag.isAdded()) { ft.hide(dateFrag); }
+                        break;
+                    case 1:
+                        if (timeFrag.isAdded()) {
+                            ft.show(timeFrag);
+                        } else {
+                            ft.add(R.id.fragmentHolder, timeFrag);
+                        }
+
+                        if (infoFrag.isAdded()) { ft.hide(infoFrag); }
+
+                        if (dateFrag.isAdded()) { ft.hide(dateFrag); }
+                        break;
+                    case 2:
+                        if (dateFrag.isAdded()) {
+                            ft.show(dateFrag);
+                        } else {
+                            ft.add(R.id.fragmentHolder, dateFrag);
+                        }
+
+                        if (timeFrag.isAdded()) { ft.hide(timeFrag); }
+
+                        if (infoFrag.isAdded()) { ft.hide(infoFrag); }
+                        break;
+                }
+*/
                 ft.commit();
             }
 
@@ -114,15 +157,17 @@ public class SetReminderActivity extends AppCompatActivity implements
 
     @Override
     public void confirmReminder(Calendar calendar) {
+
         Intent intent = new Intent(SetReminderActivity.this, BaseMemoDetailActivity.class);
-        if(calendar != null) {
+        if (calendar != null) {
             intent.putExtra(MemoApp.memoMilisExtra, calendar.getTimeInMillis());
         } else {
-            intent.putExtra(MemoApp.memoMilisExtra, (Long)null);
+            intent.putExtra(MemoApp.memoMilisExtra, (Long) null);
         }
         Log.d(TAG, "Reminder confirmed: " + intent.getExtras().get(MemoApp.memoMilisExtra));
 
         this.setResult(MemoApp.setReminderRequestCode, intent);
+
         finish();
 
     }

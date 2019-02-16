@@ -1,10 +1,10 @@
 package com.example.reminder;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.RoomWarnings;
 import android.arch.persistence.room.Update;
 
 import java.util.Calendar;
@@ -14,18 +14,13 @@ import java.util.List;
 public interface MemoDao {
 
     @Query("SELECT * FROM Memos")
-    List<Memo> getAll();
+    LiveData<List<Memo>> getAll();
 
     @Query("SELECT * FROM Memos WHERE id=:id")
     Memo getById(Integer id);
 
-    @Query("SELECT id, create_date, title, reminder_date, period FROM Memos")
-    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    List<Memo> getAllBasic();
-
     @Query("SELECT reminder_date FROM Memos WHERE id = :id")
     Calendar getReminderDateById(Integer id);
-
 
     @Insert
     void insert(Memo memo);

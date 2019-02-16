@@ -5,11 +5,12 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 
 @Entity(tableName = "Memos")
-public class Memo {
+public class Memo implements Serializable {
     public static enum Period {
         none(MemoApp.getLocalResources().getString(R.string.none)),
         daily(MemoApp.getLocalResources().getString(R.string.daily)),
