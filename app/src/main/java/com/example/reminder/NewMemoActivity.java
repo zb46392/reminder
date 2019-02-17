@@ -17,7 +17,7 @@ public class NewMemoActivity extends BaseMemoDetailActivity {
         getMemo().setTitle(getMemoTitle().getText().toString());
         getMemo().setBody(getMemoBody().getText().toString());
 
-        getMemoViewModel().insert(getMemo());
+        getMemoViewModel().insert(getMemo(), this);
 
         finish();
     }

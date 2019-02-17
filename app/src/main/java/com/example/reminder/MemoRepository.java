@@ -2,33 +2,37 @@ package com.example.reminder;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import java.util.List;
 
 public class MemoRepository {
     private MemoDao memoDao;
-    private LiveData<List<Memo>>  allMemos;
+    private LiveData<List<Memo>> allMemos;
 
-    public MemoRepository(Application application){
+    public MemoRepository(Application application) {
         MemoDB memoDB = MemoDB.getInstance(application);
         this.memoDao = memoDB.memoDao();
         this.allMemos = this.memoDao.getAll();
     }
 
-    public void getById(){}
+    public void getById() {
+    }
 
-    public void getReminderDateById(){}
+    public void getReminderDateById() {
+    }
 
-    public void insert(Memo memo) {
-        new AsyncInsert(this.memoDao).execute(memo);
+    public void insert(Memo memo, Context context) {
+        new AsyncInsert(this.memoDao, context).execute(memo);
     }
 
     public void update(Memo memo) {
         new AsyncUpdate(this.memoDao).execute(memo);
     }
 
-    public void delete(Memo memo){
+    public void delete(Memo memo) {
         new AsyncDelete(this.memoDao).execute(memo);
     }
 
@@ -36,24 +40,39 @@ public class MemoRepository {
         return allMemos;
     }
 
-    private static class AsyncInsert extends AsyncTask<Memo, Void, Void>{
+    private static class AsyncInsert extends AsyncTask<Memo, Void, Long> {
         private MemoDao memoDao;
+        private Memo memo;
+        private Context context;
 
-        private AsyncInsert(MemoDao memoDao){
+        private AsyncInsert(MemoDao memoDao, Context context) {
             this.memoDao = memoDao;
+            this.context = context;
         }
 
         @Override
-        protected Void doInBackground(Memo... memos) {
-            this.memoDao.insert(memos[0]);
-            return null;
+        protected Long doInBackground(Memo... memos) {
+            this.memo = memos[0];
+            return this.memoDao.insert(this.memo);
+        }
+
+        @Override
+        protected void onPostExecute(Long memoId) {
+            super.onPostExecute(memoId);
+
+            this.memo.setId(memoId.intValue());
+
+            Intent intent = new Intent(MemoInsertedReceiver.INTENT_NAME);
+            intent.putExtra(MemoApp.memoExtra, this.memo);
+
+            this.context.sendBroadcast(intent);
         }
     }
 
-    private static class AsyncUpdate extends AsyncTask<Memo, Void, Void>{
+    private static class AsyncUpdate extends AsyncTask<Memo, Void, Void> {
         private MemoDao memoDao;
 
-        private AsyncUpdate(MemoDao memoDao){
+        private AsyncUpdate(MemoDao memoDao) {
             this.memoDao = memoDao;
         }
 
@@ -64,10 +83,10 @@ public class MemoRepository {
         }
     }
 
-    private static class AsyncDelete extends AsyncTask<Memo, Void, Void>{
+    private static class AsyncDelete extends AsyncTask<Memo, Void, Void> {
         private MemoDao memoDao;
 
-        private AsyncDelete(MemoDao memoDao){
+        private AsyncDelete(MemoDao memoDao) {
             this.memoDao = memoDao;
         }
 

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.Calendar;
+
 public class UpdateMemoActivity extends BaseMemoDetailActivity{
     private static final String TAG = UpdateMemoActivity.class.getSimpleName();
 
@@ -26,6 +28,10 @@ public class UpdateMemoActivity extends BaseMemoDetailActivity{
     protected void saveMemo() {
         getMemo().setTitle(getMemoTitle().getText().toString());
         getMemo().setBody(getMemoBody().getText().toString());
+
+        if(getMemo().getReminderDate() != null && getMemo().getReminderDate().after(Calendar.getInstance())){
+            ((MemoApp)getApplication()).setReminderAlarm(getMemo());
+        }
 
         getMemoViewModel().update(getMemo());
 

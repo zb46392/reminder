@@ -87,7 +87,7 @@ public class ReminderInformationFragment extends Fragment {
                         calendar.set(year, month, day, hour, minute, 0);
                     } else {
                         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                calendar.get(Calendar.DAY_OF_MONTH), hour, minute);
+                                calendar.get(Calendar.DAY_OF_MONTH), hour, minute, 0);
                     }
 
                     Log.d(TAG, "SetReminderFab: " + calendar.getTimeInMillis());

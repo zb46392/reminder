@@ -23,7 +23,7 @@ public interface MemoDao {
     Calendar getReminderDateById(Integer id);
 
     @Insert
-    void insert(Memo memo);
+    Long insert(Memo memo);
 
     @Update
     void update(Memo memo);

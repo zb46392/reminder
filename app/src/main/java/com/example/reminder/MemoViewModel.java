@@ -3,6 +3,7 @@ package com.example.reminder;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class MemoViewModel extends AndroidViewModel {
         this.liveMemos = this.memoRepository.getAllMemos();
     }
 
-    public void insert(Memo memo){
-        this.memoRepository.insert(memo);
+    public void insert(Memo memo, Context context){
+        this.memoRepository.insert(memo, context);
     }
 
     public void update(Memo memo){

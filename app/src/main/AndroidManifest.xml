@@ -24,6 +24,16 @@
         <activity android:name=".NewMemoActivity"/>
         <activity android:name=".UpdateMemoActivity"/>
         <activity android:name=".SetReminderActivity"/>
+        <receiver android:name=".ReminderAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.example.reminder.REMINDER"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".MemoInsertedReceiver">
+            <intent-filter>
+                <action android:name="com.example.reminder.MEMO_INSERTED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
